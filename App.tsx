@@ -9,97 +9,112 @@ import {
   View,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  const dynamicStyles = StyleSheet.create({
+    background: {
+      backgroundColor: isDarkMode ? '#1a1a1a' : '#f5f5f5',
+    },
+    content: {
+      backgroundColor: isDarkMode ? '#000000' : '#ffffff',
+    },
+    title: {
+      color: isDarkMode ? '#ffffff' : '#000000',
+    },
+    subtitle: {
+      color: isDarkMode ? '#cccccc' : '#333333',
+    },
+    sectionTitle: {
+      color: isDarkMode ? '#ffffff' : '#000000',
+    },
+    sectionText: {
+      color: isDarkMode ? '#cccccc' : '#333333',
+    },
+  });
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView style={[styles.container, dynamicStyles.background]}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+        backgroundColor={dynamicStyles.background.backgroundColor}
       />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+        style={dynamicStyles.background}>
+        <View style={[styles.content, dynamicStyles.content]}>
+          <Text style={[styles.title, dynamicStyles.title]}>
+            Welcome to Simple Quran Studio
+          </Text>
+          <Text style={[styles.subtitle, dynamicStyles.subtitle]}>
+            A React Native app for Quran study and recitation
+          </Text>
+          <View style={styles.section}>
+            <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>
+              Getting Started
+            </Text>
+            <Text style={[styles.sectionText, dynamicStyles.sectionText]}>
+              Edit <Text style={styles.highlight}>App.tsx</Text> to start
+              building your Quran Studio features.
+            </Text>
+          </View>
+          <View style={styles.section}>
+            <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>
+              Features
+            </Text>
+            <Text style={[styles.sectionText, dynamicStyles.sectionText]}>
+              • Cross-platform support (iOS, Android, Web)
+            </Text>
+            <Text style={[styles.sectionText, dynamicStyles.sectionText]}>
+              • TypeScript support
+            </Text>
+            <Text style={[styles.sectionText, dynamicStyles.sectionText]}>
+              • Hot reloading
+            </Text>
+            <Text style={[styles.sectionText, dynamicStyles.sectionText]}>
+              • Expo development tools
+            </Text>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-const Section = ({children, title}: {children: React.ReactNode; title: string}): JSX.Element => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
-
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+  },
+  content: {
+    padding: 20,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  subtitle: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 30,
+  },
+  section: {
+    marginBottom: 25,
   },
   sectionTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '600',
+    marginBottom: 10,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  sectionText: {
+    fontSize: 16,
+    lineHeight: 24,
+    marginBottom: 5,
   },
   highlight: {
     fontWeight: '700',
+    color: '#007AFF',
   },
 });
 

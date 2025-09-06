@@ -35,7 +35,15 @@ module.exports = {
     alias: {
       'react-native$': 'react-native-web',
     },
-    extensions: ['.web.js', '.js', '.web.ts', '.ts', '.web.tsx', '.tsx', '.json'],
+    extensions: [
+      '.web.js',
+      '.js',
+      '.web.ts',
+      '.ts',
+      '.web.tsx',
+      '.tsx',
+      '.json',
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
