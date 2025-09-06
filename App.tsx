@@ -1,6 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
-  Alert,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -9,10 +8,12 @@ import {
   View,
 } from 'react-native';
 import SurahList from './src/components/SurahList';
+import SurahEditor from './src/components/SurahEditor';
 import {Surah} from './src/data/surahs';
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+  const [selectedSurah, setSelectedSurah] = useState<Surah | null>(null);
 
   const dynamicStyles = StyleSheet.create({
     background: {
@@ -31,11 +32,11 @@ function App(): JSX.Element {
   });
 
   const handleSurahPress = (surah: Surah) => {
-    Alert.alert(
-      `Surah ${surah.englishName}`,
-      `${surah.englishNameTranslation}\n\n${surah.name}\n\n${surah.numberOfAyahs} verses • ${surah.revelationType}`,
-      [{text: 'OK'}],
-    );
+    setSelectedSurah(surah);
+  };
+
+  const handleBackToList = () => {
+    setSelectedSurah(null);
   };
 
   return (
@@ -44,15 +45,21 @@ function App(): JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={dynamicStyles.background.backgroundColor}
       />
-      <View style={[styles.header, dynamicStyles.header]}>
-        <Text style={[styles.title, dynamicStyles.title]}>
-          Simple Quran Studio
-        </Text>
-        <Text style={[styles.subtitle, dynamicStyles.subtitle]}>
-          Select a Surah to read
-        </Text>
-      </View>
-      <SurahList onSurahPress={handleSurahPress} />
+      {selectedSurah ? (
+        <SurahEditor surah={selectedSurah} onBack={handleBackToList} />
+      ) : (
+        <>
+          <View style={[styles.header, dynamicStyles.header]}>
+            <Text style={[styles.title, dynamicStyles.title]}>
+              Simple Quran Studio
+            </Text>
+            <Text style={[styles.subtitle, dynamicStyles.subtitle]}>
+              Select a Surah to read
+            </Text>
+          </View>
+          <SurahList onSurahPress={handleSurahPress} />
+        </>
+      )}
     </SafeAreaView>
   );
 }
