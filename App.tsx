@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   StatusBar,
@@ -32,12 +32,21 @@ function App(): JSX.Element {
   });
 
   const handleSurahPress = (surah: Surah) => {
+    console.log('🔵 App: Surah pressed:', surah);
+    console.log('🔵 App: Setting selectedSurah to:', surah);
     setSelectedSurah(surah);
+    console.log('🔵 App: State update called');
   };
 
   const handleBackToList = () => {
     setSelectedSurah(null);
   };
+
+  useEffect(() => {
+    console.log('🟢 App: selectedSurah state changed to:', selectedSurah);
+  }, [selectedSurah]);
+
+  console.log('🟢 App render - selectedSurah:', selectedSurah);
 
   return (
     <SafeAreaView style={[styles.container, dynamicStyles.background]}>

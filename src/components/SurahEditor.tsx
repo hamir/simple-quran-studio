@@ -21,6 +21,8 @@ const SurahEditor: React.FC<SurahEditorProps> = ({surah, onBack}) => {
   const [ayahData, setAyahData] = useState<AyahData | null>(null);
   const [loading, setLoading] = useState(true);
 
+  console.log('🟡 SurahEditor render - surah:', surah);
+
   const dynamicStyles = StyleSheet.create({
     container: {
       backgroundColor: isDarkMode ? '#1a1a1a' : '#f5f5f5',
@@ -56,19 +58,25 @@ const SurahEditor: React.FC<SurahEditorProps> = ({surah, onBack}) => {
     },
   });
 
-  useEffect(() => {
-    loadAyahData();
-  }, [surah.number, loadAyahData]);
-
   const loadAyahData = useCallback(async () => {
     try {
+      console.log('🟠 Starting to load ayah data for surah:', surah.number);
       setLoading(true);
+
       // Try to fetch the JSON file
+      console.log('🟠 Fetching from /ayah_fragments.json');
       const response = await fetch('/ayah_fragments.json');
+      console.log('🟠 Response status:', response.status, 'ok:', response.ok);
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+
       const ayahFragments: AyahData = await response.json();
+      console.log(
+        '🟠 Loaded ayah fragments, total keys:',
+        Object.keys(ayahFragments).length,
+      );
 
       // Filter data for this surah only
       const surahData: AyahData = {};
@@ -78,11 +86,17 @@ const SurahEditor: React.FC<SurahEditorProps> = ({surah, onBack}) => {
         }
       }
 
+      console.log(
+        '🟠 Filtered surah data, verses found:',
+        Object.keys(surahData).length,
+      );
+      console.log('🟠 Verse keys:', Object.keys(surahData));
       setAyahData(surahData);
     } catch (error) {
-      console.error('Error loading ayah data:', error);
+      console.error('🔴 Error loading ayah data:', error);
       // Fallback: try to import directly
       try {
+        console.log('🟠 Trying fallback method...');
         const ayahFragments = require('../../assets/ayah_fragments.json');
         const surahData: AyahData = {};
         for (const key in ayahFragments) {
@@ -90,14 +104,23 @@ const SurahEditor: React.FC<SurahEditorProps> = ({surah, onBack}) => {
             surahData[key] = ayahFragments[key];
           }
         }
+        console.log(
+          '🟠 Fallback successful, verses found:',
+          Object.keys(surahData).length,
+        );
         setAyahData(surahData);
       } catch (fallbackError) {
-        console.error('Fallback loading also failed:', fallbackError);
+        console.error('🔴 Fallback loading also failed:', fallbackError);
       }
     } finally {
+      console.log('🟠 Setting loading to false');
       setLoading(false);
     }
   }, [surah.number]);
+
+  useEffect(() => {
+    loadAyahData();
+  }, [surah.number, loadAyahData]);
 
   const renderVerse = (verseKey: string, fragments: AyahFragment[]) => {
     const verseNumber = verseKey.split(':')[1];
@@ -126,7 +149,15 @@ const SurahEditor: React.FC<SurahEditorProps> = ({surah, onBack}) => {
     );
   };
 
+  console.log(
+    '🟡 SurahEditor render - loading:',
+    loading,
+    'ayahData:',
+    ayahData,
+  );
+
   if (loading) {
+    console.log('🟡 Showing loading state');
     return (
       <View
         style={[
@@ -149,6 +180,8 @@ const SurahEditor: React.FC<SurahEditorProps> = ({surah, onBack}) => {
         return aNum - bNum;
       })
     : [];
+
+  console.log('🟡 SurahEditor render - verseKeys:', verseKeys);
 
   return (
     <View style={[styles.container, dynamicStyles.container]}>

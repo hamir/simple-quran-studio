@@ -19,6 +19,8 @@ const SurahList: React.FC<SurahListProps> = ({onSurahPress}) => {
   const screenWidth = Dimensions.get('window').width;
   const cardWidth = (screenWidth - 40 - 16) / 3; // 40 for margins, 16 for gaps
 
+  console.log('🔵 SurahList render - onSurahPress:', typeof onSurahPress);
+
   const dynamicStyles = StyleSheet.create({
     container: {
       backgroundColor: isDarkMode ? '#1a1a1a' : '#f5f5f5',
@@ -48,7 +50,11 @@ const SurahList: React.FC<SurahListProps> = ({onSurahPress}) => {
   const renderSurahItem = ({item}: {item: Surah}) => (
     <TouchableOpacity
       style={[styles.surahItem, dynamicStyles.item]}
-      onPress={() => onSurahPress(item)}
+      onPress={() => {
+        console.log('🔵 SurahList: Item pressed:', item);
+        alert(`Surah ${item.number} pressed!`);
+        onSurahPress(item);
+      }}
       activeOpacity={0.7}>
       <View style={styles.surahContent}>
         <View style={styles.surahNumberContainer}>
